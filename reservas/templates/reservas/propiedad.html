@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>TP Metodologia</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% load static %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
+        <!-- Fontawesome CSS -->
+        <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
+    </head>
+
+
+<section class="container">
+    <div class="row mt-5">
+        <article class="col-xs-12 col-sm-4">
+            <div class="card" style="width: 18rem;">
+            {% load static %}
+                <img class="card-img-top" src="{{ propiedad.imagen.url }}" alt="">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ propiedad.titulo }}</h5>
+                    <p class="card-text">{{ propiedad.descripcion }}</p>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-xs-12 col-md-8">
+            <h2>Available dates</h2>
+
+            {% if diasReservacion|length >= 1 %}
+                <form action="{% url 'reserva' %}" method="POST">
+                    <div class="form-group">
+                        <label for="">Select dates</label>
+
+                        <select class="form-control" name="reservation_dates" id="reservation_dates" multiple="multiple">
+                            {% for diaReservacion in diasReservacion %}
+                                <option value="">Fecha: {{diaReservacion.fecha_alq}} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-primary mt-4">Reservate!</button>
+                </form>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    No dates availables
+                </div>
+            {% endif %}
+        </article>
+    </div>
+</section>
+
+<a href="{% url 'propiedades' %}" class="btn btn-primary">Back</a>

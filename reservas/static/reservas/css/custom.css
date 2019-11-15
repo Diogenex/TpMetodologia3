@@ -1,0 +1,33 @@
+.full-page-image {
+  position: absolute;
+    /* The image used */
+  background-image: url("../images/bg.jpg");
+
+  /* Full height */
+  min-height: 100%;
+  min-width: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
+
+.full-page {
+    min-height: 100vh;
+    min-width: 100vh;
+}
+
+.search-box {
+    min-width: 80%;
+    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.search-box-filter > .input-group > * {
+  height: 50px;
+}

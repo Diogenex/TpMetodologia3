@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% load static %}
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
+  <!-- Fontawesome CSS -->
+  <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
+  <!-- Bootstrap-datepicker CSS -->
+  <link href="{% static 'reservas/css/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+  <!-- Alertify CSS -->
+  <link href="{% static 'reservas/css/alertify/alertify.min.css' %}" rel="stylesheet">
+  <link href="{% static 'reservas/css/alertify/themes/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'reservas/css/custom.css' %}">
+
+  <title>Truchibnb</title>
+</head>
+
+<body>
+  <div class="full-page-image"></div>
+  <div class="container p-0">
+    <div class="row">
+      <div class="col-12">
+        <div class="full-page d-flex align-items-center flex-wrap">
+          <div class="d-flex flex-fill justify-content-center align-items-center">
+            <h2 class="font-weight-bolder text-white">¿Que estás buscando?</h2>
+            <div class="search-box p-2 rounded-0">
+              <form id="form" action="{% url 'filtradas' %}" method="POST">
+                  {% csrf_token %}
+                <div class="search-box-filter">
+                  <div class="input-group">
+                    <select class="custom-select rounded-0" id="cities" name="city">
+                      <option selected disabled value="0">Cuidades</option>
+                      {% for ciudad in lista_ciudades %}
+                        <option>{{ciudad.nombre}}</option>
+                      {% endfor %}
+                    </select>
+                    <select class="custom-select rounded-0" id="pax-qty" name="pax_qty">
+                      <option selected disabled value="0">Cantidad de Pasajeros</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                    <input type="text" id="from-date" name="from_date" placeholder="Fecha desde"
+                      class="form-control rounded-0">
+                    <input type="text" id="to-date" name="to_date" placeholder="Fecha hasta"
+                      class="form-control rounded-0">
+                    <div class="input-group-append">
+                      <button type="button" onclick="validate()" class="btn btn-outline-primary rounded-0"><i
+                          class="fas fa-search"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="{% static 'reservas/js/jquery.js' %}"></script>
+  <script src="{% static 'reservas/js/popper.js' %}"></script>
+  <script src="{% static 'reservas/js/bootstrap/bootstrap.min.js' %}"></script>
+  <!-- Bootstrap-datepicker JS -->
+  <script src="{% static 'reservas/js/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+  <script src="{% static 'reservas/js/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js' %}"></script>
+  <!-- Alertify JS -->
+  <script src="{% static 'reservas/js/alertify/alertify.min.js' %}"></script>
+  <script>
+    let $toDate = $('#to-date').datepicker({
+      format: 'yyyy-mm-dd',
+      startDate: '0d',
+      language: 'es',
+      autoclose: true
+    });
+
+    let $fromDate = $('#from-date').datepicker({
+      format: 'yyyy-mm-dd',
+      startDate: '0d',
+      language: 'es',
+      autoclose: true
+    })
+      .on("changeDate", function (e) {
+        if (e.date > $toDate.datepicker("getDate")) {
+          $toDate.datepicker("clearDates");
+        }
+        $toDate.datepicker("setStartDate", e.date);
+      });
+
+    function validate() {
+      $form = $("#form");
+      let $cities = $form.find("#cities");
+      let $paxQty = $form.find("#pax-qty");
+      let fromDate = $fromDate.datepicker("getDate");
+      let toDate = $toDate.datepicker("getDate");
+
+      if (!$cities.val()) {
+        $cities.focus();
+        alertify.error("Debe seleccionar una ciudad");
+        return false;
+      }
+
+      if (!$paxQty.val()) {
+        $paxQty.focus();
+        alertify.error("Debe seleccionar al menos un pasajero");
+        return false;
+      }
+
+      if (!fromDate) {
+        $fromDate.focus();
+        alertify.error("Debe seleccionar una fecha desde");
+        return false;
+      }
+
+      if (!toDate) {
+        $toDate.focus();
+        alertify.error("Debe seleccionar una fecha hasta");
+        return false;
+      }
+
+      if (fromDate > toDate) {
+        $toDate.focus();
+        alertify.error("La Fecha hasta debe ser mayor a la fecha desde");
+        return false;
+      }
+
+      $form.submit();
+    }
+  </script>
+</body>
+
+</html>

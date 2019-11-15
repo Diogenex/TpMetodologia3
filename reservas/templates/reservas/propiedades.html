@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>TP Metodologia</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% load static %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
+        <!-- Fontawesome CSS -->
+        <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
+    </head>
+
+<section class="container">
+    <div class="row mt-5">
+        {% if lista_propiedades|length >= 1 %}
+            {% for propiedad in lista_propiedades %}
+                <article class="col-xs-12 col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        {% load static %}
+                        <img class="card-img-top" src="{{ propiedad.imagen.url }}" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ propiedad.titulo }}</h5>
+                            <p class="card-text">{{ propiedad.descripcion }}</p>
+                            <a href="{% url 'propiedad' propiedad.id %}" class="btn btn-primary">View more</a>
+
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                No properties for this date range
+            </div>
+        {% endif %}
+        
+    </div>
+    <a href="{% url 'index' %}" class="btn btn-primary">Back</a>
+</section>
