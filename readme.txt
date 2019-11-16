@@ -1,6 +1,7 @@
-Integrantes del Grupo: Ramiro, Pereyra
-                       Dall Armellina, Leandro
+Integrantes del Grupo: Ramiro, Pereyra.
+                       Dall Armellina, Leandro.
 
+GitHub: https://github.com/Diogenex/TpMetodologia3
 
 superuser = admin
 email = admin@example.com
