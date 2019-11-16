@@ -7,5 +7,5 @@ urlpatterns = [
     path('propiedades/', views.propiedades, name='propiedades'),
     path('filtradas/', views.propiedadesFiltradas, name='filtradas'),
     path('<int:propiedad_id>/', views.propiedad, name='propiedad'),
-    path('reserva/', views.reserva, name='reserva')
+    path('<int:propiedad_id>/reserva/', views.reserva, name='reserva')
 ]

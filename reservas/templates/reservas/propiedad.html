@@ -32,13 +32,13 @@
             <h2>Available dates</h2>
 
             {% if diasReservacion|length >= 1 %}
-                <form action="{% url 'reserva' %}" method="POST">
+                <form action="{% url 'reserva' propiedad.id %}" method="POST">
                     <div class="form-group">
                         <label for="">Select dates</label>
 
                         <select class="form-control" name="reservation_dates" id="reservation_dates" multiple="multiple">
                             {% for diaReservacion in diasReservacion %}
-                                <option value="">Fecha: {{diaReservacion.fecha_alq}} </option>
+                                <option value="{{ diaReservacion.id }}">Fecha: {{diaReservacion.fecha_alq}} </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -56,4 +56,4 @@
     </div>
 </section>
 
-<a href="{% url 'propiedades' %}" class="btn btn-primary">Back</a>
+<a href="{% url 'filtradas' %}" class="btn btn-primary">Back</a>

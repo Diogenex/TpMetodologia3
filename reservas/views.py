@@ -2,6 +2,9 @@ from django.shortcuts import get_object_or_404,render
 from .models import Propiedad
 from .models import Ciudad
 from .models import Fecha_Alquiler
+from .models import Reserva
+import datetime
+from django.utils.crypto import get_random_string
 
 def index(request):
     lista_ciudades = Ciudad.objects.all()
@@ -17,6 +20,16 @@ def propiedadesFiltradas(request):
 
     fechaDesde = request.POST.get('from_date')
     fechaHasta = request.POST.get('to_date')
+    ciudad = request.POST.get('city')
+    cantidad = request.POST.get('pax_qty')
+
+    lista_opciones = []
+    lista_info = {}
+    lista_info ['desde'] = fechaDesde
+    lista_info ['hasta'] = fechaHasta
+    lista_info ['ciudad'] = ciudad
+    lista_info ['cantidad'] = cantidad
+    lista_opciones.append(lista_info)    
 
     def square(x):
         return x.propiedad
@@ -34,7 +47,8 @@ def propiedadesFiltradas(request):
         lista_propiedades = Propiedad.objects.all()
 
 
-    context = { 'lista_propiedades': lista_propiedades, }
+    context = { 'lista_propiedades': lista_propiedades,
+                'lista_opciones' : lista_opciones }
     return render(request, 'reservas/propiedades.html', context)
 
 def propiedad(request, propiedad_id):
@@ -44,5 +58,29 @@ def propiedad(request, propiedad_id):
                 'diasReservacion': diasReservacion,}
     return render(request, 'reservas/propiedad.html', context)
 
-def reserva(request):
-    return render(request, 'reservas/reserva.html')
+def reserva(request, propiedad_id):
+    diasReservacion = Fecha_Alquiler.objects.filter(propiedad=propiedad_id, id__in=request.POST.getlist('reservation_dates')).all()
+    reserva = Reserva()
+
+    
+    propiedad = Propiedad.objects.get(id=propiedad_id)
+    
+    reserva.fecha_reserva = datetime.date.today()
+    reserva.propiedad = propiedad
+    reserva.codigo = get_random_string(length=12)
+    
+    reserva.total = len(request.POST.getlist('reservation_dates')) * propiedad.precio_diario
+    reserva.save()
+
+
+    reservaId = Reserva.objects.latest('id')
+
+    
+    diasReservacion.update(reserva=reservaId)
+
+    return render(request, 'reservas/reserva.html', {
+        'propiedad': propiedad,
+        'reserva': reserva,
+        'diasReservacion': diasReservacion
+    })
+   

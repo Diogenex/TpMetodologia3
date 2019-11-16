@@ -1,28 +1,6 @@
-<!doctype html>
-<html lang="en">
+{% extends "head.html" %}
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  {% load static %}
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
-  <!-- Fontawesome CSS -->
-  <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
-  <!-- Bootstrap-datepicker CSS -->
-  <link href="{% static 'reservas/css/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet">
-  <!-- Alertify CSS -->
-  <link href="{% static 'reservas/css/alertify/alertify.min.css' %}" rel="stylesheet">
-  <link href="{% static 'reservas/css/alertify/themes/bootstrap.min.css' %}" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="{% static 'reservas/css/custom.css' %}">
-
-  <title>Truchibnb</title>
-</head>
-
-<body>
+{% block content %}
   <div class="full-page-image"></div>
   <div class="container p-0">
     <div class="row">
@@ -38,7 +16,7 @@
                     <select class="custom-select rounded-0" id="cities" name="city">
                       <option selected disabled value="0">Cuidades</option>
                       {% for ciudad in lista_ciudades %}
-                        <option>{{ciudad.nombre}}</option>
+                        <option value="{{ciudad.nombre}}">{{ciudad.nombre}}</option>
                       {% endfor %}
                     </select>
                     <select class="custom-select rounded-0" id="pax-qty" name="pax_qty">
@@ -68,16 +46,7 @@
     </div>
   </div>
 
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="{% static 'reservas/js/jquery.js' %}"></script>
-  <script src="{% static 'reservas/js/popper.js' %}"></script>
-  <script src="{% static 'reservas/js/bootstrap/bootstrap.min.js' %}"></script>
-  <!-- Bootstrap-datepicker JS -->
-  <script src="{% static 'reservas/js/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
-  <script src="{% static 'reservas/js/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js' %}"></script>
-  <!-- Alertify JS -->
-  <script src="{% static 'reservas/js/alertify/alertify.min.js' %}"></script>
+  
   <script>
     let $toDate = $('#to-date').datepicker({
       format: 'yyyy-mm-dd',
@@ -139,6 +108,4 @@
       $form.submit();
     }
   </script>
-</body>
-
-</html>
+{% endblock %}

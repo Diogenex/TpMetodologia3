@@ -1,1 +1,43 @@
-Reservas
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>TP Metodologia</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% load static %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
+        <!-- Fontawesome CSS -->
+        <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
+    </head>
+
+<section class="container">
+    <div class="row mt-5">
+        <article class="col-xs-12">
+            <div class="jumbotron">
+                <h1 class="display-4">Felicidades Capo</h1>
+                <p class="lead">Te vas de vacaciones!!Informacion Importante:</p>
+
+                <ul>
+                    <li>Propiedad: {{ propiedad.titulo }}</li>
+                    <li>Total + Comision: {{ reserva.total }}</li>
+                    <li>Codigo de  referencia: {{ reserva.codigo }}</li>
+                </ul>
+
+                <hr class="my-4">
+
+                <p>Fechas de Reservas:</p>
+
+                <ul>
+                    {% for diasReservacion in diaReserva %}
+                        <li>{{ diaReserva.fecha_alq}}</li>
+                    {% endfor %}
+                </ul>
+
+                <a class="btn btn-primary btn-lg" href="{% url 'propiedades' %}" role="button">Ir a Inicio</a>
+            </div>
+        </article>
+    </div>
+</section>

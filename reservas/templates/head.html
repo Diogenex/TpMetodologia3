@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
+    <!-- Fontawesome CSS -->
+    <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap-datepicker CSS -->
+    <link href="{% static 'reservas/css/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <!-- Alertify CSS -->
+    <link href="{% static 'reservas/css/alertify/alertify.min.css' %}" rel="stylesheet">
+    <link href="{% static 'reservas/css/alertify/themes/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'reservas/css/custom.css' %}">
+
+    <title>Truchibnb</title>
+</head>
+
+<body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'reservas/js/jquery.js' %}"></script>
+    <script src="{% static 'reservas/js/popper.js' %}"></script>
+    <script src="{% static 'reservas/js/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- Bootstrap-datepicker JS -->
+    <script src="{% static 'reservas/js/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'reservas/js/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js' %}"></script>
+    <!-- Alertify JS -->
+    <script src="{% static 'reservas/js/alertify/alertify.min.js' %}"></script>
+
+    <main id="content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>
