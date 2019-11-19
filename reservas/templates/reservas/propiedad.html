@@ -1,59 +1,123 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <title>TP Metodologia</title>
+{% extends "head.html" %}
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        {% load static %}
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
-        <!-- Fontawesome CSS -->
-        <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
-    </head>
-
-
-<section class="container">
-    <div class="row mt-5">
-        <article class="col-xs-12 col-sm-4">
-            <div class="card" style="width: 18rem;">
-            {% load static %}
-                <img class="card-img-top" src="{{ propiedad.imagen.url }}" alt="">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{ propiedad.titulo }}</h5>
-                    <p class="card-text">{{ propiedad.descripcion }}</p>
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 sidebar bg-primary">
+            <h4 class="text-white border-bottom">Propiedad</h4>
+            <ul class="list-unstyled text-white my-4">
+                <li><i class="fas fa-fw fa-dollar-sign"></i> {{ propiedad.precio_diario }} diarios</li>
+                <li><i class="fas fa-fw fa-users"></i> Max: {{ propiedad.max_pax }}</li>
+                <li><i class="fas fa-fw fa-user"></i> Dueño: {{ propiedad.dueño }}</li>
+                <li><i class="fas fa-fw fa-map-marker-alt"></i> {{ propiedad.ciudad.nombre }}</li>
+            </ul>
+            <form id="form" action="{% url 'filtradas' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="from_date" value="{{ lista_info.desde}}"></input>
+                <input type="hidden" name="to_date" value="{{ lista_info.hasta}}"></input>
+                <input type="hidden" name="city" value="{{ lista_info.ciudad }}"></input>
+                <input type="hidden" name="pax_qty" value="{{ lista_info.cantidad }}"></input>
+                <button type="submit" class="btn btn-block btn-secondary">Volver</a>
+            </form>
+        </div>
+        <div class="col-10 main-content">
+            <div class="properties-wrapper">
+                <h3 class="mb-3">{{ propiedad.titulo }}</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="img-container">
+                            <img class="img-fluid" src="{{ propiedad.imagen.url }}" alt="{{ propiedad.titulo }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="mt-2">Descripción</h4>
+                        <p>{{ propiedad.descripcion }}</p>
+                        {% if diasReservacion|length >= 1 %}
+                        <form id="form-reserva" action="{% url 'reserva' propiedad.id %}" method="POST">
+                            
+                            <h4>Seleccione Fechas</h4>
+                            <select class="form-control" name="reservation_dates" id="reservation_dates" multiple="multiple">
+                                {% for diaReservacion in diasReservacion %}
+                                    <option value="{{ diaReservacion.id }}">Fecha: {{diaReservacion.fecha_alq}} </option>
+                                {% endfor %}
+                            </select>
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary mt-4">Reservate!</button>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            No hay fechas para reservar!
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </article>
-
-        <article class="col-xs-12 col-md-8">
-            <h2>Available dates</h2>
-
-            {% if diasReservacion|length >= 1 %}
-                <form action="{% url 'reserva' propiedad.id %}" method="POST">
-                    <div class="form-group">
-                        <label for="">Select dates</label>
-
-                        <select class="form-control" name="reservation_dates" id="reservation_dates" multiple="multiple">
-                            {% for diaReservacion in diasReservacion %}
-                                <option value="{{ diaReservacion.id }}">Fecha: {{diaReservacion.fecha_alq}} </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    {% csrf_token %}
-
-                    <button type="submit" class="btn btn-primary mt-4">Reservate!</button>
-                </form>
-            {% else %}
-                <div class="alert alert-danger" role="alert">
-                    No dates availables
-                </div>
-            {% endif %}
-        </article>
+        </div>
     </div>
-</section>
+</div>
+<script>
 
-<a href="{% url 'filtradas' %}" class="btn btn-primary">Back</a>
+    /* var reservationIds = {
+        {% if diasReservacion|length >= 1 %}
+            {% for diaReservacion in diasReservacion %}
+                "{{ diaReservacion.fecha_alq|date:"Y-m-d" }}": "{{ diaReservacion.id }}",
+            {% endfor %}
+        {% endif %}
+    }; */
+
+    var enableDays = [
+        {% if diasReservacion|length >= 1 %}
+            {% for diaReservacion in diasReservacion %}
+                "{{ diaReservacion.fecha_alq|date:"Y-m-d" }}",
+            {% endfor %}
+        {% endif %}
+    ];
+
+    function formatDate(d) {
+        var day = String(d.getDate());
+        if (day.length == 1) {
+            day = '0' + day;
+        }
+
+        var month = String((d.getMonth() + 1))
+        if (month.length == 1) {
+            month = '0' + month;
+        }
+        return d.getFullYear() + "-" + month + "-" + day;
+    }
+
+    $datepicker = $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        startDate: '0d',
+        language: 'es',
+        autoclose: true,
+        multidate: true,
+        beforeShowDay: function (date) {
+            if (enableDays.indexOf(formatDate(date)) < 0) {
+                return {
+                    enabled: false
+                }
+            } else {
+                return {
+                    enabled: true
+                }
+            }
+        }
+    });
+
+    function validate() {
+        let dates = $datepicker.datepicker("getDates");
+        if (dates.length == 0) {
+            alertify.error("Debe seleccionar al menos una fecha");
+            return false;
+        }
+
+        $reservationForm = $("#form-reserva");
+        dates.forEach(function(item, index) {
+            let key = formatDate(item);
+            $reservationForm.append("<input type='hidden' name='reservation_dates[]' value='"+ reservationIds[key] +"'>");
+        });
+        $reservationForm.submit();
+    }
+</script>
+{% endblock %}

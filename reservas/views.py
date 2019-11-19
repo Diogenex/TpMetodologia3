@@ -38,10 +38,12 @@ def propiedadesFiltradas(request):
         
         diasReservacion = Fecha_Alquiler.objects.filter(
             fecha_alq__range=(fechaDesde, fechaHasta),
-            reserva__isnull=True
+            reserva__isnull=True,
         ).all()
 
+       
         lista_propiedades = list(set(map(square, diasReservacion)))
+        
     else:
 
         lista_propiedades = Propiedad.objects.all()

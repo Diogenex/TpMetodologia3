@@ -1,43 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <title>TP Metodologia</title>
+{% extends "head.html" %}
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        {% load static %}
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="{% static 'reservas/css/bootstrap.min.css' %}">
-        <!-- Fontawesome CSS -->
-        <link href="{% static 'reservas/css/fontawesome/all.min.css' %}" rel="stylesheet">
-    </head>
-
-<section class="container">
-    <div class="row mt-5">
-        <article class="col-xs-12">
-            <div class="jumbotron">
-                <h1 class="display-4">Felicidades Capo</h1>
-                <p class="lead">Te vas de vacaciones!!Informacion Importante:</p>
-
-                <ul>
-                    <li>Propiedad: {{ propiedad.titulo }}</li>
-                    <li>Total + Comision: {{ reserva.total }}</li>
-                    <li>Codigo de  referencia: {{ reserva.codigo }}</li>
-                </ul>
-
-                <hr class="my-4">
-
-                <p>Fechas de Reservas:</p>
-
-                <ul>
-                    {% for diasReservacion in diaReserva %}
-                        <li>{{ diaReserva.fecha_alq}}</li>
-                    {% endfor %}
-                </ul>
-
-                <a class="btn btn-primary btn-lg" href="{% url 'propiedades' %}" role="button">Ir a Inicio</a>
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 sidebar bg-primary">
+            <h4 class="text-white border-bottom">Felicidades</h4>
+            <p class="text-white">Desde Truchibnb te deseamos unas buenas vacaciones!</p>
+        </div>
+        <div class="col-10 main-content">
+            <div class="properties-wrapper">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4 class="mt-2">Has reservado!</h4>
+                        <p>{{ propiedad.titulo }}</p>
+                        <h4>Informacion importante</h4>
+                        <ul class="list-unstyled">
+                            <li>Propiedad: {{ propiedad.titulo }}</li>
+                            <li>Total + Comision: {{ reserva.total }}</li>
+                            <li>Codigo de referencia: {{ reserva.codigo }}</li>
+                        </ul>
+                        <h4>Fechas de Reservas</h4>
+                        <ul class="list-unstyled">
+                            {% for diasReservacion in diaReserva %}
+                            <li>{{ diaReserva.fecha_alq}}</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url 'index' %}" class="btn btn-block btn-outline-primary">Index</a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="img-container">
+                            <img class="img-fluid" src="{{ propiedad.imagen.url }}" alt="{{ propiedad.titulo }}">
+                        </div>
+                    </div>
+                </div>
             </div>
-        </article>
+        </div>
     </div>
-</section>
+</div>
+<script>
+    {% endblock %}
